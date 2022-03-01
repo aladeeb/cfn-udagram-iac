@@ -1,0 +1,64 @@
+---
+Parameters:
+  ProjectName:
+    Description: this is the project name
+    Type: String
+    Default: Udagram
+
+Resources:
+  #Security Groups
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: WebServerSG
+      GroupDescription: Web Server SG that allows http
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        IpProtocol: -1
+        FromPort: -1
+        ToPort: -1
+        CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName}-Web Server SG
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: LoadBalancerSG
+      GroupDescription: Load Balancer SG that allows http only
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName}-Load Balancer SG
+
+Outputs:
+  WebServerSecurityGroup:
+    Description: Web server security group id
+    Value: !Ref WebServerSecurityGroup
+    Export: 
+      Name: !Sub ${ProjectName}-webserver-sg
+  ALBSecurityGroup:
+    Description: Application load balancer security group
+    Value: !Ref ALBSecurityGroup
+    Export: 
+      Name: !Sub ${ProjectName}-alb-sg
+...
+
+# aws cloudformation validate-template --template-body=file://security-groups.yaml
+# aws cloudformation create-stack --template-body=file://security-groups.yaml --stack-name=udagram-security-groups
+# aws cloudformation update-stack --template-body=file://security-groups.yaml --stack-name=udagram-security-groups
