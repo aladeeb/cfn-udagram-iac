@@ -17,8 +17,8 @@ Resources:
         - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-1
         - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-2
       Tags:
-        Key: Name
-        Value: !Sub ${ProjectName}-ALB
+        - Key: Name
+          Value: !Sub ${ProjectName}-ALB
       Type: application
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -26,8 +26,8 @@ Resources:
       Port: 80
       Protocol: HTTP
       Tags:
-        Key: Name
-        Value: !Sub ${ProjectName}-TargetGroup
+        - Key: Name
+          Value: !Sub ${ProjectName}-TargetGroup
       VpcId:
         Fn::ImportValue: 
           !Sub ${ProjectName}-vpc
