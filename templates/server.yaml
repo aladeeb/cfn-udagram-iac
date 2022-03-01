@@ -39,6 +39,7 @@ Resources:
       HealthCheckType: ELB
       LaunchTemplate:
         LaunchTemplateId: !Ref WebServerLaunchTemplate
+        Version: 1.0.0
       MaxSize: 4
       MinSize: 4
       Tags:
