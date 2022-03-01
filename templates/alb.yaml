@@ -58,12 +58,16 @@ Outputs:
     Value: !Ref ALB
     Export: 
       Name: !Sub ${ProjectName}-alb
-  TargetGroups:
-    Description: Information about the value
+  TargetGroup:
+    Description: Target Group
     Value: !Ref TargetGroup
     Export: 
       Name: !Sub ${ProjectName}-target-group
-
+  ALBDNS:
+    Description: ALB DNS
+    Value: !GetAtt ALB.DNSName
+    Export: 
+      Name: !Sub ${ProjectName}-dns-name
 ...
 
 # aws cloudformation validate-template --template-body=file://templates/alb.yaml
