@@ -42,8 +42,8 @@ Resources:
       MaxSize: 4
       MinSize: 4
       Tags:
-        Key: Name
-        Value: !Sub ${ProjectName}-ASG
+        - Key: Name
+          Value: !Sub ${ProjectName}-ASG
       TargetGroupARNs:
         - Fn::ImportValue: !Sub ${ProjectName}-target-group
       VPCZoneIdentifier:
