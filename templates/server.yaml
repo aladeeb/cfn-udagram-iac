@@ -44,6 +44,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${ProjectName}-ASG
+          PropagateAtLaunch: false
       TargetGroupARNs:
         - Fn::ImportValue: !Sub ${ProjectName}-target-group
       VPCZoneIdentifier:
