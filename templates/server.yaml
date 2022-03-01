@@ -43,9 +43,15 @@ Resources:
       MaxSize: 4
       MinSize: 4
       Tags:
-        - Key: Name
+        - Key: ASGName
           Value: !Sub ${ProjectName}-ASG
           PropagateAtLaunch: false
+        - Key: Name
+          Value: !Sub ${ProjectName}-WebServer
+          PropagateAtLaunch: true
+        - Key: Environment
+          Value: Production
+          PropagateAtLaunch: true
       TargetGroupARNs:
         - Fn::ImportValue: !Sub ${ProjectName}-target-group
       VPCZoneIdentifier:
