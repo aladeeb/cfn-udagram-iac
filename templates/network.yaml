@@ -155,7 +155,6 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NATGW2
 
-
 Outputs:
   VPCID:
     Description: VPC
@@ -192,8 +191,9 @@ Outputs:
     Value: !Ref EIP2
     Export: 
       Name: !Sub ${ProjectName}-eip-2
+
 ...
 
-# aws cloudformation validate-template --template-body=file://network.yaml
-# aws cloudformation create-stack --template-body=file://network.yaml --stack-name=udagram-network
-# aws cloudformation update-stack --template-body=file://network.yaml --stack-name=udagram-network
+# aws cloudformation validate-template --template-body=file://templates/network.yaml
+# aws cloudformation create-stack --template-body=file://templates/network.yaml --stack-name=udagram-network
+# aws cloudformation update-stack --template-body=file://templates/network.yaml --stack-name=udagram-network

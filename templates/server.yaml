@@ -1,0 +1,72 @@
+---
+Parameters:
+  ProjectName:
+    Description: this is the project name
+    Type: String
+    Default: Udagram
+  ASGName:
+    Description: autosaling group name
+    Type: String
+    Default: udagram-asg
+  DesiredCapacity:
+    Description: Desired number of web servers instances
+    Type: String
+    Default: 4
+  AMIID:
+    Description: AMI ID
+    Type: String
+    Default: ami-0e472ba40eb589f49
+  InstanceType:
+    Description: Instance Type
+    Type: String
+    Default: t2.micro
+  KeyName:
+    Description: Key Name
+    Type: String
+    Default: udagram
+
+Resources:
+  #Server
+  ASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Ref ASGName
+      AvailabilityZones:
+        - !Select [0, !GetAZs '']
+        - !Select [1, !GetAZs '']
+      DesiredCapacity: 4
+      HealthCheckGracePeriod: 60
+      HealthCheckType: ELB
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebServerLaunchTemplate
+      MaxSize: 4
+      MinSize: 4
+      Tags:
+        Key: Name
+        Value: !Sub ${ProjectName}-ASG
+      TargetGroupARNs:
+        - Fn::ImportValue: !Sub ${ProjectName}-target-group
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub ${ProjectName}-private-subnet-1
+        - Fn::ImportValue: !Sub ${ProjectName}-private-subnet-2
+  WebServerLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: !Ref AMIID
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref KeyName
+        SecurityGroupIds:
+          - Fn::ImportValue: !Sub ${ProjectName}-webserver-sg
+        UserData: !Base64 |
+            #!/bin/bash
+            apt-get update -y
+            apt-get install apache2 -y
+            systemctl start apache2.service
+            echo “Hello World from $(hostname -f)” > /var/www/html/index.html
+
+...
+
+# aws cloudformation validate-template --template-body=file://templates/server.yaml
+# aws cloudformation create-stack --template-body=file://templates/server.yaml --stack-name=udagram-server
+# aws cloudformation update-stack --template-body=file://templates/server.yaml --stack-name=udagram-server

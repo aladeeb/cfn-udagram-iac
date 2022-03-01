@@ -1,0 +1,71 @@
+---
+Parameters:
+  ProjectName:
+    Description: this is the project name
+    Type: String
+    Default: Udagram
+
+Resources:
+  #Load Balancer
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub ${ProjectName}ALB
+      SecurityGroups:
+        - Fn::ImportValue: !Sub ${ProjectName}-alb-sg
+      Subnets:
+        - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-1
+        - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-2
+      Tags:
+        Key: Name
+        Value: !Sub ${ProjectName}-ALB
+      Type: application
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        Key: Name
+        Value: !Sub ${ProjectName}-TargetGroup
+      VpcId:
+        Fn::ImportValue: 
+          !Sub ${ProjectName}-vpc
+  Listner:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions: 
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions: 
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      Conditions: 
+        - Field: path-pattern
+          Values: [/]
+      ListenerArn: !Ref Listner 
+      Priority: 1
+
+Outputs:
+  ALB:
+    Description: Application Load Balancer
+    Value: !Ref ALB
+    Export: 
+      Name: !Sub ${ProjectName}-alb
+  TargetGroups:
+    Description: Information about the value
+    Value: !Ref TargetGroup
+    Export: 
+      Name: !Sub ${ProjectName}-target-group
+
+...
+
+# aws cloudformation validate-template --template-body=file://templates/alb.yaml
+# aws cloudformation create-stack --template-body=file://templates/alb.yaml --stack-name=udagram-alb
+# aws cloudformation update-stack --template-body=file://templates/alb.yaml --stack-name=udagram-alb
