@@ -1,9 +1,9 @@
 # Deploy a high-availability web app using CloudFormation
 
 ## Server Requirements: 
-- Launch configuration for the server that will be used by the ASG.
-- 4 servers, two in each private subnet.
-- Server Specs: (2 vCPUs, 4GB RAM, 15GB storage and based on Ubuntu18).
+- Hardware Specs: (2 vCPUs, 4GB RAM, 15GB storage).
+- Software Specs: Ubuntu 18.4 and Apache server.
+- 4 Servers should be deployed in service.
 
 ## Security Requirements: 
 - IAM role to allow the servers to download files from specific S3 bucket.
