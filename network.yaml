@@ -155,46 +155,6 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NATGW2
 
-  #Security Groups
-  WebServerSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: WebServerSG
-      GroupDescription: Web Server SG that allows http
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        IpProtocol: -1
-        FromPort: -1
-        ToPort: -1
-        CidrIp: 0.0.0.0/0
-      Tags:
-        - Key: Name
-          Value: !Sub ${ProjectName}-Web Server SG
-  ALBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: LoadBalancerSG
-      GroupDescription: Load Balancer SG that allows http only
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
-      Tags:
-        - Key: Name
-          Value: !Sub ${ProjectName}-Load Balancer SG
-
   #Load Balancer
   ALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -249,5 +209,5 @@ Outputs:
 ...
 
 # aws cloudformation validate-template --template-body=file://network.yaml
-# aws cloudformation create-stack --template-body=file://network.yaml --stack-name=network
-# aws cloudformation update-stack --template-body=file://network.yaml --stack-name=network
+# aws cloudformation create-stack --template-body=file://network.yaml --stack-name=udagram-network
+# aws cloudformation update-stack --template-body=file://network.yaml --stack-name=udagram-network
