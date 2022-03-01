@@ -12,7 +12,7 @@ Resources:
     Properties:
       Name: !Sub ${ProjectName}ALB
       SecurityGroups:
-        - !Ref ALBSecurityGroup
+        - Fn::ImportValue: !Sub ${ProjectName}-alb-sg
       Subnets:
         - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-1
         - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-2
