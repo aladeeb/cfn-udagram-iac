@@ -155,57 +155,43 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NATGW2
 
-  #Load Balancer
-  ALB:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Name: !Sub ${ProjectName}ALB
-      SecurityGroups:
-        - !Ref ALBSecurityGroup
-      Subnets:
-        - !Ref PublicSubnet1
-        - !Ref PublicSubnet2
-      Tags:
-        Key: Name
-        Value: !Sub ${ProjectName}-ALB
-      Type: application
 
 Outputs:
   VPCID:
     Description: VPC
     Value: !Ref VPC
     Export: 
-      Name: !Sub ${ProjectName}-VPC
+      Name: !Sub ${ProjectName}-vpc
   PrivateSubnet1:
     Description: Private subnet 1
     Value: !Ref PrivateSubnet1
     Export: 
-      Name: !Sub ${ProjectName}-PrivateSubnet1
+      Name: !Sub ${ProjectName}-private-subnet-1
   PrivateSubnet2:
     Description: Private subnet 2
     Value: !Ref PrivateSubnet2
     Export: 
-      Name: !Sub ${ProjectName}-PrivateSubnet2
+      Name: !Sub ${ProjectName}-private-subnet-2
   PublicSubnet1:
     Description: Public subnet 1
     Value: !Ref PublicSubnet1
     Export: 
-      Name: !Sub ${ProjectName}-PublicSubnet1
+      Name: !Sub ${ProjectName}-public-subnet-1
   PublicSubnet2:
     Description: Public subnet 2
     Value: !Ref PublicSubnet2
     Export: 
-      Name: !Sub ${ProjectName}-PublicSubnet2
+      Name: !Sub ${ProjectName}-public-subnet-2
   EIP1:
     Description: Elastic IP 1
     Value: !Ref EIP1
     Export: 
-      Name: !Sub ${ProjectName}-EIP1
+      Name: !Sub ${ProjectName}-eip-1
   EIP2:
     Description: Elastic IP 2
     Value: !Ref EIP2
     Export: 
-      Name: !Sub ${ProjectName}-EIP2
+      Name: !Sub ${ProjectName}-eip-2
 ...
 
 # aws cloudformation validate-template --template-body=file://network.yaml

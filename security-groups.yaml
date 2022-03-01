@@ -14,7 +14,7 @@ Resources:
       GroupDescription: Web Server SG that allows http
       VpcId: 
         Fn::ImportValue:
-          !Sub ${ProjectName}-VPC
+          !Sub ${ProjectName}-vpc
       SecurityGroupIngress:
         IpProtocol: tcp
         FromPort: 80
@@ -35,7 +35,7 @@ Resources:
       GroupDescription: Load Balancer SG that allows http only
       VpcId: 
         Fn::ImportValue:
-          !Sub ${ProjectName}-VPC
+          !Sub ${ProjectName}-vpc
       SecurityGroupIngress:
         IpProtocol: tcp
         FromPort: 80
