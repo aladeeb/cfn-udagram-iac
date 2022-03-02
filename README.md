@@ -45,6 +45,35 @@
 ```
 
 
+## Run Locally
+
+Follow the steps in the mentioned order and you have to wait till each stack completed on CloudFormation
+
+Execute network.yaml
+
+```bash
+  aws cloudformation create-stack --template-body=file://templates/network.yaml --stack-name=udagram-network
+```
+
+Execute security-groups.yaml
+
+```bash
+  aws cloudformation create-stack --template-body=file://templates/security-groups.yaml --stack-name=udagram-security-groups
+```
+
+Execute alb.yaml
+
+```bash
+  aws cloudformation create-stack --template-body=file://templates/alb.yaml --stack-name=udagram-alb
+```
+
+Execute server.yaml
+
+```bash
+  aws cloudformation create-stack --template-body=file://templates/server.yaml --stack-name=udagram-server
+```
+
+
 ## Author
 - [@Ahmed Ayman Aladeeb' LinkedIn](https://www.linkedin.com/in/ahmedaymanaladeeb/)
 - [@Ahmed Ayman Aladeeb' Github](https://github.com/aladeeb)
