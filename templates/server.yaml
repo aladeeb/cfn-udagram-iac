@@ -63,7 +63,8 @@ Resources:
       LaunchTemplateData:
         IamInstanceProfile: !Ref IAMInstanceProfile
         ImageId: !Ref AMIID
-        InstanceType: !Ref InstanceType
+        InstanceType: 
+          Arn: !GetAtt InstanceProfile.Arn
         KeyName: !Ref KeyName
         SecurityGroupIds:
           - Fn::ImportValue: !Sub ${ProjectName}-webserver-sg
@@ -75,11 +76,11 @@ Resources:
             systemctl start apache2.service
             rm /var/www/html/index.html
             aws s3 cp s3://adeeb-udagram-app/src.zip /tmp
-            unzip -d /var/www/html /tmp/src.zip
+            unzip /var/www/html /tmp/src.zip
             rm /tmp/src.zip
             hostname=$(hostname -f)
             rpl "EC2HOSTNAME" $hostname /var/www/html/index.html
-            
+
   #A role for reading from S3
   IAMRole:
     Type: AWS::IAM::Role
@@ -113,5 +114,5 @@ Resources:
 ...
 
 # aws cloudformation validate-template --template-body=file://templates/server.yaml
-# aws cloudformation create-stack --template-body=file://templates/server.yaml --stack-name=udagram-server
-# aws cloudformation update-stack --template-body=file://templates/server.yaml --stack-name=udagram-server
+# aws cloudformation create-stack --template-body=file://templates/server.yaml --stack-name=udagram-server --capabilities CAPABILITY_NAMED_IAM
+# aws cloudformation update-stack --template-body=file://templates/server.yaml --stack-name=udagram-server --capabilities CAPABILITY_NAMED_IAM
