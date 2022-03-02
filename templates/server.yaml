@@ -61,10 +61,10 @@ Resources:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData:
-        IamInstanceProfile: !Ref IAMInstanceProfile
+        IamInstanceProfile: 
+          Arn: !GetAtt IAMInstanceProfile.Arn
         ImageId: !Ref AMIID
-        InstanceType: 
-          Arn: !GetAtt InstanceProfile.Arn
+        InstanceType: !Ref InstanceType
         KeyName: !Ref KeyName
         SecurityGroupIds:
           - Fn::ImportValue: !Sub ${ProjectName}-webserver-sg
