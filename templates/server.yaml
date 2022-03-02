@@ -19,7 +19,7 @@ Parameters:
   InstanceType:
     Description: Instance Type
     Type: String
-    Default: t2.micro
+    Default: t2.medium
   KeyName:
     Description: Key Name
     Type: String
@@ -57,29 +57,42 @@ Resources:
       VPCZoneIdentifier:
         - Fn::ImportValue: !Sub ${ProjectName}-private-subnet-1
         - Fn::ImportValue: !Sub ${ProjectName}-private-subnet-2
+        # - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-1     # KEPT FOR TESTING
+        # - Fn::ImportValue: !Sub ${ProjectName}-public-subnet-2     # KEPT FOR TESTING
   WebServerLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData:
+        BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+            DeleteOnTermination: 'true'
+            VolumeSize: 15
+            VolumeType: gp2
         IamInstanceProfile: 
           Arn: !GetAtt IAMInstanceProfile.Arn
         ImageId: !Ref AMIID
         InstanceType: !Ref InstanceType
-        KeyName: !Ref KeyName
+        # KeyName: !Ref KeyName     # KEPT FOR TESTING
         SecurityGroupIds:
           - Fn::ImportValue: !Sub ${ProjectName}-webserver-sg
         UserData: !Base64 |
             #!/bin/bash
-            apt-get update -y
-            apt-get install rpl -y
-            apt-get install apache2 -y
-            systemctl start apache2.service
-            rm /var/www/html/index.html
-            aws s3 cp s3://adeeb-udagram-app/src.zip /tmp
-            unzip /var/www/html /tmp/src.zip
-            rm /tmp/src.zip
+            sudo apt-get update -y
+            sudo apt-get install rpl -y
+            sudo apt-get install unzip -y
+            sudo apt-get install awscli -y
+            sudo apt-get install apache2 -y
+            sudo systemctl start apache2.service
+            sudo chmod 2775 /var/www
+            find /var/www -type d -exec sudo chmod 2775 {} \;
+            find /var/www -type f -exec sudo chmod 0664 {} \;
+            sudo rm /var/www/html/index.html
+            sudo aws s3 cp s3://adeeb-udagram-app/src.zip /tmp
+            sudo unzip -d /var/www/html /tmp/src.zip
+            sudo rm /tmp/src.zip
             hostname=$(hostname -f)
-            rpl "EC2HOSTNAME" $hostname /var/www/html/index.html
+            sudo rpl "EC2HOSTNAME" $hostname /var/www/html/index.html
 
   #A role for reading from S3
   IAMRole:
