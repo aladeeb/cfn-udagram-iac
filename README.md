@@ -1,5 +1,11 @@
 # Deploy a high-availability web app using CloudFormation
 
+## Demo: 
+- http://udagramalb-1107100627.us-east-1.elb.amazonaws.com/
+
+## Solution Design
+![Solution Design Diagram](https://github.com/aladeeb/cfn-udagram-iac/blob/main/docs/Solution%20Design.png?raw=true)
+
 ## Server Requirements: 
 - Hardware Specs: (2 vCPUs, 4GB RAM, 15GB storage).
 - Software Specs: Ubuntu 18.4 and Apache server.
@@ -16,6 +22,28 @@
 
 ## Outputs: 
 - LB DNS Name
+
+
+## UserData script: 
+```bash
+    #!/bin/bash
+    sudo apt-get update -y
+    sudo apt-get install rpl -y
+    sudo apt-get install unzip -y
+    sudo apt-get install awscli -y
+    sudo apt-get install apache2 -y
+    sudo systemctl start apache2.service
+    sudo chmod 2775 /var/www
+    find /var/www -type d -exec sudo chmod 2775 {} \;
+    find /var/www -type f -exec sudo chmod 0664 {} \;
+    sudo rm /var/www/html/index.html
+    sudo aws s3 cp s3://adeeb-udagram-app/src.zip /tmp
+    sudo unzip -d /var/www/html /tmp/src.zip
+    sudo rm /tmp/src.zip
+    hostname=$(hostname -f)
+    sudo rpl "EC2HOSTNAME" $hostname /var/www/html/index.html
+```
+
 
 ## Author
 - [@Ahmed Ayman Aladeeb' LinkedIn](https://www.linkedin.com/in/ahmedaymanaladeeb/)
