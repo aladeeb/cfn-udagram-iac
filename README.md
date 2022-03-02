@@ -10,6 +10,7 @@
 - Hardware Specs: (2 vCPUs, 4GB RAM, 15GB storage).
 - Software Specs: Ubuntu 18.4 and Apache server.
 - 4 Servers should be deployed in service.
+- Load balancer to distribute the load on the application servers. 
 
 ## Security Requirements: 
 - IAM role to allow the servers to download files from specific S3 bucket.
