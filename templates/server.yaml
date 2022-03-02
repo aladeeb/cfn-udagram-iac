@@ -70,9 +70,16 @@ Resources:
         UserData: !Base64 |
             #!/bin/bash
             apt-get update -y
+            apt-get install rpl -y
             apt-get install apache2 -y
             systemctl start apache2.service
-            echo “Hello World from $(hostname -f)” > /var/www/html/index.html
+            rm /var/www/html/index.html
+            aws s3 cp s3://adeeb-udagram-app/src.zip /tmp
+            unzip -d /var/www/html /tmp/src.zip
+            rm /tmp/src.zip
+            hostname=$(hostname -f)
+            rpl "EC2HOSTNAME" $hostname /var/www/html/index.html
+            
   #A role for reading from S3
   IAMRole:
     Type: AWS::IAM::Role
