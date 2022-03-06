@@ -1,4 +1,4 @@
-# Deploy a high-availability web app using CloudFormation
+# Deploy a high-availability web app using CloudFormation (A Udacity project)
 
 ## Demo: 
 - http://udagramalb-1107100627.us-east-1.elb.amazonaws.com/
