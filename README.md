@@ -1,7 +1,7 @@
 # Deploy a high-availability web app using CloudFormation (A Udacity project)
 
 ## Demo: 
-- http://udagramalb-1107100627.us-east-1.elb.amazonaws.com/
+- http://udagramalb-1107100627.us-east-1.elb.amazonaws.com/ (Down currently)
 
 ## Solution Design
 ![Solution Design Diagram](https://github.com/aladeeb/cfn-udagram-iac/blob/main/docs/Solution%20Design.png?raw=true)
